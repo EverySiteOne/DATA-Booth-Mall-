@@ -1,9 +1,8 @@
 # DATA Booth Mall
 
-เว็บรวม Dashboard Booth Mall Insurance 2569 (GitHub Pages)
+Dashboard Booth Mall Insurance 2569 บน GitHub Pages — ไม่มีแถบเตือนของ Google Apps Script
 
-- เมนู **การออกบูธ**: ฝัง Google Apps Script Web App (ข้อมูลจาก Google Sheets อัปเดตอัตโนมัติ)
-- ปุ่ม **เปิดในแท็บใหม่**: ทางเลือกสำรองเมื่อแสดงแบบฝังไม่ได้
-- เพิ่มเมนูใหม่: แก้ `MENUS` ใน `index.html`
-
-เปิดใช้งาน: Settings › Pages › Branch: `main` / `(root)` › Save
+- หน้าเว็บ (`index.html`) ดึงข้อมูลจาก Google Apps Script Web App (`API_URL` ในไฟล์) ซึ่งอ่านจาก Google Sheets และอัปเดตอัตโนมัติ
+- Apps Script ต้องใช้ `Code.gs` เวอร์ชันที่รองรับ `?api=getDashboardData` และ Deploy แบบ Who has access: Anyone
+- เปิดตรงหน้าการออกบูธ: `https://chaloemphos-byte.github.io/DATA-Booth-Mall-/?tab=ops`
+- ถ้าดึงข้อมูลไม่ได้ หน้าเว็บจะแสดงลิงก์เปิด Dashboard (Apps Script) ในแท็บใหม่
