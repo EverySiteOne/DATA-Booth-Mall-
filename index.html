@@ -20,6 +20,25 @@
   --radius:14px; --shadow:0 1px 2px rgba(16,26,46,.05),0 4px 14px rgba(16,26,46,.04);
 }
 *{box-sizing:border-box}
+/* ---- หน้าเข้าสู่ระบบ ---- */
+.login{position:fixed;inset:0;z-index:100;display:none;place-items:center;padding:20px;background:radial-gradient(1200px 600px at 20% -10%,#1d3f86 0%,transparent 60%),linear-gradient(160deg,var(--side) 0%,#0a1838 100%)}
+.login.open{display:grid}
+body.locked .app{display:none}
+.login-card{width:100%;max-width:380px;background:var(--surface);border-radius:18px;padding:30px 28px 24px;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+.login-card .brand-mark{width:44px;height:44px;border-radius:12px;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:700;font-size:18px;margin-bottom:14px}
+.login-card h2{margin:0 0 2px;font-size:20px}
+.login-card p.lsub{margin:0 0 20px;color:var(--text-2);font-size:13.5px}
+.login-card label{display:block;font-size:13px;font-weight:600;color:var(--text-2);margin:12px 0 5px}
+.login-card input{width:100%;font:inherit;font-size:15px;padding:10px 12px;border:1px solid var(--border-strong);border-radius:10px;background:#fff;color:var(--text)}
+.login-card input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.login-card .pw{position:relative}.login-card .pw input{padding-right:64px}
+.login-card .pw button{position:absolute;right:6px;top:50%;transform:translateY(-50%);border:0;background:none;color:var(--accent);font:inherit;font-size:12.5px;cursor:pointer;padding:6px}
+.login-card .lbtn{width:100%;margin-top:20px;padding:11px;border:0;border-radius:10px;background:var(--accent);color:#fff;font:inherit;font-size:15px;font-weight:600;cursor:pointer}
+.login-card .lbtn:disabled{opacity:.6;cursor:wait}
+.login-err{display:none;margin-top:14px;padding:9px 12px;border-radius:9px;background:var(--bad-bg);color:var(--bad);font-size:13px}
+.login-err.on{display:block}
+.login-foot{margin-top:16px;text-align:center;color:var(--muted);font-size:12px}
+.side-user{font-size:12.5px;color:var(--side-text);padding:4px 12px 6px;line-height:1.4}.side-user b{color:#fff;display:block;font-size:13px}
 html,body{margin:0;background:var(--bg);color:var(--text);font-family:"IBM Plex Sans Thai",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:14px;line-height:1.55}
 button,input,select{font:inherit;color:inherit}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
@@ -427,11 +446,25 @@ tr.dimr td,td.dimc{opacity:.35}
 </style>
 </head>
 <body>
+<div class="login" id="login" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+  <form class="login-card" id="loginForm" autocomplete="on" onsubmit="Auth.submit(event)">
+    <div class="brand-mark">B</div>
+    <h2 id="loginTitle">Booth Mall 2569</h2>
+    <p class="lsub">เข้าสู่ระบบด้วยรหัสผู้ใช้และรหัสผ่านของคุณ</p>
+    <label for="lgUser">รหัสผู้ใช้</label>
+    <input id="lgUser" name="username" autocomplete="username" required autocapitalize="off" spellcheck="false">
+    <label for="lgPass">รหัสผ่าน</label>
+    <div class="pw"><input id="lgPass" name="password" type="password" autocomplete="current-password" required><button type="button" onclick="Auth.togglePw()" id="lgEye">แสดง</button></div>
+    <button class="lbtn" id="lgBtn" type="submit">เข้าสู่ระบบ</button>
+    <div class="login-err" id="lgErr" role="alert"></div>
+    <div class="login-foot">ลืมรหัสผ่าน ติดต่อผู้ดูแลระบบ</div>
+  </form>
+</div>
 <div class="app">
   <aside class="side" id="side" aria-label="เมนู">
     <div class="brand"><span class="brand-mark">B</span><span><b>Booth Mall 2569</b><small>บูธประกันในศูนย์การค้า</small></span></div>
     <nav class="nav" id="sideNav"></nav>
-    <div class="side-foot"><button onclick="App.exportCurrent()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>ส่งออกตารางเป็น CSV</button></div>
+    <div class="side-foot"><button onclick="App.exportCurrent()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>ส่งออกตารางเป็น CSV</button><div class="side-user" id="sideUser"></div><button id="btnLogout" onclick="Auth.logout()" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>ออกจากระบบ</button></div>
   </aside>
   <div class="scrim" id="scrim" onclick="App.menu(false)"></div>
 
@@ -473,15 +506,54 @@ const API_URL = 'https://script.google.com/macros/s/AKfycbwuBmJ5kVPbULQkq2IXRNc2
 /* =====================================================================
  * 1) DATA SOURCE LAYER — เปลี่ยนวิธีเชื่อมต่อได้ที่นี่ที่เดียว
  * ===================================================================== */
+const isExternal = () => !(window.google && google.script && google.script.run);
+const Auth = {
+  KEY: 'bm.auth', s: null,
+  load() { try { const v = JSON.parse(localStorage.getItem(this.KEY) || 'null'); if (v && v.token && v.exp > Date.now()) this.s = v; else localStorage.removeItem(this.KEY); } catch (e) {} return !!this.s; },
+  get ok() { return !isExternal() || !!(this.s && this.s.exp > Date.now()); },
+  token() { return this.s ? this.s.token : ''; },
+  show(msg) {
+    document.body.classList.add('locked'); $('login').classList.add('open');
+    const er = $('lgErr'); er.textContent = msg || ''; er.classList.toggle('on', !!msg);
+    setTimeout(() => ($('lgUser').value ? $('lgPass') : $('lgUser')).focus(), 50);
+  },
+  hide() { document.body.classList.remove('locked'); $('login').classList.remove('open'); this.paint(); },
+  paint() {
+    const on = isExternal() && this.s;
+    $('sideUser').innerHTML = on ? `<b>${U.esc(this.s.name || this.s.user)}</b>${U.esc(this.s.dept || '')}` : '';
+    $('btnLogout').style.display = on ? '' : 'none';
+  },
+  expire(msg) { this.s = null; try { localStorage.removeItem(this.KEY); } catch (e) {} this.show(msg || 'เซสชันหมดอายุ กรุณาเข้าสู่ระบบอีกครั้ง'); },
+  logout() { this.s = null; try { localStorage.removeItem(this.KEY); } catch (e) {} S.raw = null; S.model = null; $('lgPass').value = ''; this.paint(); this.show(); },
+  togglePw() { const i = $('lgPass'); const t = i.type === 'password'; i.type = t ? 'text' : 'password'; $('lgEye').textContent = t ? 'ซ่อน' : 'แสดง'; },
+  async submit(ev) {
+    ev.preventDefault();
+    const user = $('lgUser').value.trim(), pass = $('lgPass').value, btn = $('lgBtn'), er = $('lgErr');
+    if (!user || !pass) return;
+    btn.disabled = true; btn.textContent = 'กำลังตรวจสอบ…'; er.classList.remove('on');
+    try {
+      const body = new URLSearchParams({ api: 'login', user, pass });
+      const r = await fetch(API_URL, { method: 'POST', body, cache: 'no-store' });
+      const j = JSON.parse(await r.text());
+      if (!j.ok) throw new Error(j.error || 'รหัสผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
+      this.s = { token: j.token, exp: j.exp, user: j.user, name: j.name, dept: j.dept };
+      try { localStorage.setItem(this.KEY, JSON.stringify(this.s)); } catch (e) {}
+      $('lgPass').value = ''; this.hide(); App.refresh();
+    } catch (e) {
+      er.textContent = e instanceof SyntaxError ? 'ระบบยังไม่รองรับการเข้าสู่ระบบ — ตรวจสอบว่า Deploy Code.gs เวอร์ชันใหม่แล้ว' : (e.message === 'Failed to fetch' ? 'เชื่อมต่อระบบไม่ได้ ตรวจสอบอินเทอร์เน็ตแล้วลองใหม่' : e.message);
+      er.classList.add('on');
+    } finally { btn.disabled = false; btn.textContent = 'เข้าสู่ระบบ'; }
+  }
+};
 const DataSource = {
   _call(fn) {
     return new Promise((resolve, reject) => {
       if (!(window.google && google.script && google.script.run)) {
         // โหมดเว็บภายนอก: ดึงข้อมูล JSON จาก Web App (?api=getDashboardData / getVersion)
         if (!API_URL) { reject(new Error('ยังไม่ได้ใส่ลิงก์ Web App ใน API_URL (ไฟล์ index.html)')); return; }
-        fetch(API_URL + (API_URL.includes('?') ? '&' : '?') + 'api=' + fn + '&t=' + Date.now(), { cache: 'no-store' })
+        fetch(API_URL + (API_URL.includes('?') ? '&' : '?') + 'api=' + fn + '&token=' + encodeURIComponent(Auth.token()) + '&t=' + Date.now(), { cache: 'no-store' })
           .then(r => { if (!r.ok) throw new Error('เชื่อมต่อ Web App ไม่สำเร็จ (HTTP ' + r.status + ')'); return r.text(); })
-          .then(t => { try { resolve(JSON.parse(t)); } catch (e) { reject(new Error('Web App ไม่ได้ส่งข้อมูล JSON กลับมา — ตรวจสอบว่า Deploy เวอร์ชันใหม่ของ Code.gs และตั้ง Who has access เป็น Anyone')); } })
+          .then(t => { let j; try { j = JSON.parse(t); } catch (e) { j = undefined; } if (j && j.authRequired) { Auth.expire(j.error); reject(new Error('AUTH')); return; } try { resolve(JSON.parse(t)); } catch (e) { reject(new Error('Web App ไม่ได้ส่งข้อมูล JSON กลับมา — ตรวจสอบว่า Deploy เวอร์ชันใหม่ของ Code.gs และตั้ง Who has access เป็น Anyone')); } })
           .catch(e => reject(e instanceof Error ? e : new Error(String(e))));
         return;
       }
@@ -939,6 +1011,7 @@ const App = {
   _inflight: null,
   async refresh(manual, auto) {
     if (this._inflight) return this._inflight; // กันการเรียกซ้ำซ้อน
+    if (!Auth.ok) { Auth.show(); return; }
     S.loading = true; renderHeader();
     if (!S.model) renderSkeleton();
     this._inflight = (async () => {
@@ -949,8 +1022,9 @@ const App = {
           S.raw = raw; S.model = buildModel(raw); S.lastOk = new Date(); S.version = raw.version; S.error = null; S.stale = false;
           sanitizeFilters();
           lastErr = null; break;
-        } catch (e) { lastErr = e; if (/API_URL/.test(e && e.message)) break; if (attempt < 2) await new Promise(r => setTimeout(r, 3000 * (attempt + 1) ** 2)); }
+        } catch (e) { lastErr = e; if (/API_URL|^AUTH$/.test(e && e.message)) break; if (attempt < 2) await new Promise(r => setTimeout(r, 3000 * (attempt + 1) ** 2)); }
       }
+      if (lastErr && lastErr.message === 'AUTH') { S.loading = false; this._inflight = null; return; }
       if (lastErr) { S.error = lastErr.message || String(lastErr); S.stale = !!S.model; }
       S.loading = false; this._inflight = null;
       quiet = !!auto && !!S.lastOk && !firstLoad; firstLoad = false;
@@ -960,7 +1034,7 @@ const App = {
     return this._inflight;
   },
   async checkVersion() {
-    if (S.loading || document.hidden) return;
+    if (S.loading || document.hidden || !Auth.ok) return;
     try { const v = await DataSource.version(); if (v && S.version && v !== S.version) this.refresh(false, true); } catch (e) {}
   },
   setTab(id) { kpiEnter = true; if (id !== 'type' && window.closeAreaPanel) closeAreaPanel(true); S.tab = id; try { localStorage.setItem('bm.tab', id); } catch (e) {} this.menu(false); renderAll(); window.scrollTo({ top: 0 }); },
@@ -2567,9 +2641,9 @@ function renderView() {
  * 8) START: โหลดครั้งแรก · เช็กการแก้ไขชีตทุก 60 วินาที · Refresh ทุก 5 นาที
  * ===================================================================== */
 renderAll();
-App.refresh();
+if (isExternal() && !Auth.load()) Auth.show(); else { Auth.paint(); App.refresh(); }
 setInterval(() => App.checkVersion(), 60 * 1000);
-setInterval(() => { if (!document.hidden) App.refresh(false, true); }, 5 * 60 * 1000);
+setInterval(() => { if (!document.hidden && Auth.ok && !$('login').classList.contains('open')) App.refresh(false, true); }, 5 * 60 * 1000);
 document.addEventListener('visibilitychange', () => { if (!document.hidden) App.checkVersion(); });
 </script>
 </body>
