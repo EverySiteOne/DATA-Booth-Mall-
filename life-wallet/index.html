@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>LIFE WALLET — กระเป๋าเงินสร้างอนาคต</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--tx:#14264A;--card:#F4F6F9;--mut:#5d6b82;--ln:#e1e5eb;--lime:#C8E01E;--navy:#14264A;--blue:#2F8FE0;--or:#F59E3B;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1a30;--tx:#eef2fa;--card:#1b2a4a;--mut:#a9b6cd;--ln:#2b3c60}}
+:root[data-theme="dark"]{--bg:#0f1a30;--tx:#eef2fa;--card:#1b2a4a;--mut:#a9b6cd;--ln:#2b3c60}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:Sarabun,"Noto Sans Thai",sans-serif;font-size:16px}
+.w{max-width:720px;margin:0 auto;padding:12px 14px 40px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.top b{font-size:18px;letter-spacing:.5px}
+.sm{border:1px solid var(--ln);background:var(--card);color:var(--tx);border-radius:20px;padding:6px 12px;font:600 14px Sarabun,sans-serif;cursor:pointer;min-height:36px}
+.mas{display:flex;gap:10px;align-items:center;margin:10px 0}
+.mas svg{width:96px;flex:none}.fx .mas svg{animation:bob 2.4s ease-in-out infinite}
+.bub{background:var(--card);border-radius:16px;padding:10px 14px;line-height:1.45;position:relative}
+.bub:before{content:"";position:absolute;left:-8px;top:20px;border:8px solid transparent;border-right-color:var(--card);border-left:0}
+@keyframes bob{50%{transform:translateY(-5px)}}
+h1{font-size:30px;line-height:1.15;margin:8px 0}
+.tag{color:var(--mut);margin:4px 0 12px}
+.btn{width:100%;min-height:56px;border:0;border-radius:16px;font:800 19px Sarabun,sans-serif;color:#14264A;background:var(--lime);box-shadow:0 5px 0 #9bb000;cursor:pointer;margin:10px 0 6px}
+.btn.s{background:var(--card);color:var(--tx);box-shadow:0 3px 0 var(--ln)}
+.btn:disabled{opacity:.45}
+.wal{background:linear-gradient(135deg,#14264A,#24427a);color:#fff;border-radius:22px;padding:14px 16px;box-shadow:0 8px 20px rgba(20,38,74,.25)}
+.wal small{opacity:.8}.wal .big{font-size:36px;font-weight:800;color:var(--lime)}
+.pb{height:10px;border-radius:9px;background:rgba(255,255,255,.2);overflow:hidden;margin:6px 0 10px}.pb i{display:block;height:100%;background:var(--lime);transition:width .3s}
+.coins{display:flex;gap:10px}
+.coin{flex:1;min-height:58px;border-radius:50px;background:radial-gradient(circle at 30% 25%,#ffe58a,#f1b52c);color:#14264A;font:800 18px Sarabun,sans-serif;display:grid;place-items:center;border:3px solid transparent;touch-action:none;user-select:none;cursor:grab}
+.coin.on{border-color:#fff;box-shadow:0 0 0 3px var(--lime)}
+.ghost{position:fixed;z-index:50;width:90px;flex:none;transform:translate(-50%,-60%) scale(1.1);pointer-events:none;opacity:.95}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+@media(min-width:600px){.grid{grid-template-columns:repeat(3,1fr)}}
+.cat{background:var(--card);border:2px solid var(--ln);border-radius:18px;padding:10px;min-height:128px;position:relative;cursor:pointer;transition:transform .15s,border-color .15s;box-shadow:0 4px 10px rgba(20,38,74,.08)}
+.cat.hot{border-color:var(--blue);transform:scale(1.04);background:rgba(47,143,224,.12)}
+.cat.pop{animation:pop .35s}
+.cat .ic{font-size:30px}.cat .nm{font-weight:600;font-size:14px;line-height:1.25;min-height:36px}
+.cat .am{font-weight:800;font-size:20px}
+.cat .mini{height:6px;border-radius:6px;background:var(--ln);overflow:hidden;margin:4px 0}.cat .mini i{display:block;height:100%;background:var(--blue)}
+.cat .ctl{display:flex;gap:6px;align-items:center}
+.cat .ctl button{width:40px;height:36px;border-radius:12px;border:1px solid var(--ln);background:var(--bg);color:var(--tx);font:800 18px Sarabun,sans-serif;touch-action:none}
+@keyframes pop{50%{transform:scale(1.07)}}
+.shake{animation:sh .3s}@keyframes sh{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.note{font-size:13px;color:var(--mut);line-height:1.5}
+.card{background:var(--card);border-radius:18px;padding:14px;margin:12px 0}
+.opt{display:block;width:100%;text-align:left;background:var(--bg);color:var(--tx);border:2px solid var(--ln);border-radius:14px;padding:12px;margin:8px 0;font:600 16px Sarabun,sans-serif;min-height:52px;cursor:pointer}
+.row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--ln)}
+.bar{display:flex;align-items:center;gap:8px;margin:6px 0;font-size:14px}.bar span{width:46%}.bar div{flex:1;height:12px;background:var(--ln);border-radius:8px;overflow:hidden}.bar i{display:block;height:100%;background:var(--blue)}
+ul{padding-left:20px;margin:6px 0}li{margin:4px 0}
+.star{position:fixed;top:-20px;font-size:22px;color:var(--or);animation:fall 2.2s linear forwards;pointer-events:none}
+@keyframes fall{to{transform:translateY(105vh) rotate(360deg)}}
+.ok{color:#1a8a3a}.bad{color:#c0392b}
+.nofx *{animation:none!important;transition:none!important}
+#ov{position:fixed;inset:0;background:rgba(20,38,74,.9);display:none;flex-direction:column;align-items:center;justify-content:center;padding:16px;z-index:99;color:#fff;text-align:center;overflow:auto}
+#ov img{max-width:100%;max-height:62vh;border-radius:10px;-webkit-touch-callout:default;user-select:auto}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--navy);color:#fff;padding:10px 16px;border-radius:14px;display:none;z-index:60;max-width:90%;text-align:center}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body class="fx">
+<div class="w">
+  <div class="top"><b>LIFE WALLET</b><span><button class="sm" id="bl"></button> <button class="sm" id="bf"></button></span></div>
+  <div id="app"></div>
+</div>
+<div id="ov"><p id="ovt"></p><img id="oi" alt="LIFE WALLET"><a id="ol" class="btn" target="_blank" rel="noopener" style="display:none;max-width:300px;text-decoration:none;line-height:56px;min-height:56px"></a><button class="btn s" style="max-width:300px" id="oc"></button></div>
+<div id="toast" role="status"></div>
+<div id="card" style="position:fixed;left:-99999px;top:0"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script>
+var LEARN_URL=""; // ตั้ง URL ปุ่ม "เรียนรู้เรื่องความคุ้มครองเพิ่มเติม" ที่นี่
+var START=100000,$=function(i){return document.getElementById(i)};
+var CATS=[['f','🏠'],['h','🩺'],['e','🛟'],['d','🎓'],['s','🐷'],['p','🛡️']];
+var T={th:{
+ title:'กระเป๋าเงินสร้างอนาคต',tag:'วันนี้คุณจะจัดสรรเงิน เพื่ออนาคตแบบไหน?',sub:'เงินก้อนเดียว จัดสรรอย่างไรให้ตอบโจทย์ชีวิต?',time:'ใช้เวลาประมาณ 1–2 นาที • เงินในเกมเป็นเงินจำลองเพื่อการเรียนรู้',
+ start:'เริ่มวางแผน',left:'เงินคงเหลือในกระเป๋า',hint:'ลากเหรียญไปวางบนการ์ด หรือแตะเหรียญแล้วแตะการ์ด',next:'ไปต่อ',reset:'เริ่มใหม่',again:'เล่นอีกครั้ง',
+ over:'เงินในกระเป๋าไม่พอสำหรับจำนวนนี้',nomoney:'ยังไม่มีเงินในหมวดนี้',min:'ลองจัดสรรเงินอย่างน้อย 1 หมวดก่อนนะ',noanim:'ปิดแอนิเมชัน',anim:'เปิดแอนิเมชัน',
+ f:'ครอบครัวและบ้าน',h:'สุขภาพและค่ารักษา',e:'เงินสำรองฉุกเฉิน',d:'การศึกษาและอนาคตลูก',s:'เงินออมและวัยเกษียณ',p:'คุ้มครองชีวิตและรายได้',
+ m0:'มาเริ่มกันเลย! แตะหรือลากเหรียญได้เลย',m1:'ลองคิดดูนะว่า อะไรสำคัญกับชีวิตคุณมากที่สุด',m2:'วางสำเร็จ! ย้ายหรือเอาออกได้ตลอดเลยนะ',m3:'ไม่มีคำตอบถูกผิด ขึ้นกับชีวิตของคุณ',
+ evh:'เหตุการณ์จำลอง',evn:'เหตุการณ์ทั้งหมดเป็นสถานการณ์จำลอง ไม่ใช่การทำนายว่าจะเกิดจริง',evq:'คุณจะรับมืออย่างไร?',
+ ev:[['ค่ารักษาพยาบาลที่ไม่ได้วางแผนไว้',30000,'🏥'],['รายได้หยุดชะงักชั่วคราว',40000,'💼'],['ต้องดูแลสมาชิกในครอบครัว',20000,'👨‍👩‍👧']],
+ o:['ใช้เงินสำรองฉุกเฉิน','ปรับแผน ใช้เงินออม','พิจารณาความคุ้มครอง'],
+ r1:'เงินที่เตรียมไว้สำหรับทางเลือกนี้',r2:'ค่าใช้จ่ายจำลอง',okm:'คุณมีเงินสำรองรองรับเหตุการณ์จำลองนี้ได้',lack:'ยังมีส่วนต่างอยู่ ลองวางแผนรับมือเพิ่มเติมได้ ทุกคนปรับแผนได้เสมอ',
+ pr:'หากเลือกความคุ้มครอง ผลประโยชน์ขึ้นกับเงื่อนไขกรมธรรม์ ซึ่งเกมนี้ไม่ได้ระบุตัวเลข',plan:'ดูแผนชีวิตของฉัน',
+ dash:'แผนชีวิตของคุณ',init:'เงินเริ่มต้น',alloc:'จัดสรรแล้ว',un:'ยังไม่ได้จัดสรร',str:'จุดแข็งของแผน',con:'สิ่งที่ยังพิจารณาได้',sug:'ข้อเสนอแนะ',
+ sg:['มีเงินพร้อมสำหรับ','ยังไม่ได้จัดสรรให้'],sugt:'ทบทวนแผนได้ทุกเมื่อ ลองย้ายเงินระหว่างหมวดแล้วดูว่าสบายใจขึ้นไหม',nostr:'ลองจัดสรรให้หมวดสำคัญของคุณมากขึ้น',nocon:'คุณจัดสรรครบทุกหมวดแล้ว',
+ score:'คะแนนความครบถ้วนของแผน (เชิงเกม)',crit:'เกณฑ์: หมวดที่มีเงินจัดสรร >0 ได้ 1/6 ต่อหมวด ไม่ใช่คะแนนความเหมาะสมของประกันหรือการอนุมัติความคุ้มครอง',
+ plan0:'แผนชีวิตเน้น',
+ ins:'ความคุ้มครองกับการวางแผนชีวิต',ins0:'เงินออมช่วยให้คุณสร้างอนาคต ส่วนความคุ้มครองช่วยลดผลกระทบทางการเงินจากเหตุการณ์ที่ไม่คาดคิด',
+ il:['ประกันสุขภาพ: ช่วยบริหารความเสี่ยงค่าใช้จ่ายทางการแพทย์ตามเงื่อนไขกรมธรรม์','ประกันชีวิต: อาจช่วยดูแลภาระทางการเงินของครอบครัวตามความคุ้มครอง','ความคุ้มครองรายได้/ทุพพลภาพ: พิจารณาตามผลิตภัณฑ์และเงื่อนไขที่มี','การวางแผนเกษียณ: พิจารณาความเหมาะสมระหว่างเงินออม เงินลงทุน และผลิตภัณฑ์ประกันที่เกี่ยวข้อง'],
+ learn:'เรียนรู้เรื่องความคุ้มครองเพิ่มเติม',nourl:'ยังไม่ได้ตั้งค่า URL สำหรับปุ่มนี้',
+ disc:'เงินในเกมเป็นเงินจำลองเพื่อการเรียนรู้ ไม่ใช่เงินจริง และไม่ใช่ข้อเสนอให้จัดสรรเงินตามสัดส่วนใดโดยเฉพาะ ความคุ้มครองขึ้นกับเงื่อนไขกรมธรรม์',
+ save:'บันทึกภาพลงมือถือ',share:'แชร์ผลลัพธ์',saved:'เยี่ยมเลย! เก็บผลลัพธ์ไว้ดูได้เลยนะ',svimg:'บันทึกรูป',close:'ปิด',err:'สร้างภาพไม่สำเร็จ ลองใหม่อีกครั้ง',copied:'คัดลอกข้อความผลลัพธ์แล้ว',
+ cs:'ฉันยินยอมให้บันทึกผลการเล่น (จำนวนเงินจำลองในแต่ละหมวด ไม่มีชื่อหรือข้อมูลติดต่อ) ลง Google Sheets เพื่อสรุปภาพรวมกิจกรรม',sv2:'บันทึกผลลงระบบ',svg:'กำลังบันทึก...',svo:'บันทึกสำเร็จ ขอบคุณที่ร่วมกิจกรรม',svf:'บันทึกไม่สำเร็จ กรุณาลองอีกครั้ง',svn:'ยังไม่ได้ตั้งค่าลิงก์บันทึกผล',svd:'บันทึกแล้ว',pngsum:'สรุปจุดแข็ง',pngp:'ควรพิจารณาวางแผนความคุ้มครองให้เหมาะกับชีวิตของคุณ',date:'วันที่เล่น'},
+en:{
+ title:'LIFE WALLET — My Money, My Future',tag:'Your Money. Your Choices. Your Future.',sub:'Make your money work for the life you want.',time:'About 1–2 minutes • Play money for learning only',
+ start:'Start planning',left:'Left in wallet',hint:'Drag a coin onto a card, or tap a coin then tap a card',next:'Next',reset:'Restart',again:'Play again',
+ over:'Not enough money in the wallet',nomoney:'No money in this goal yet',min:'Please allocate to at least one goal first',noanim:'Animations off',anim:'Animations on',
+ f:'Family & Home',h:'Health & Medical',e:'Emergency Fund',d:'Education & Children',s:'Savings & Retirement',p:'Life & Income Protection',
+ m0:"Let's go! Tap or drag a coin.",m1:'Think about what matters most to you.',m2:'Nice! You can move or remove it anytime.',m3:'There is no right or wrong. It is your life.',
+ evh:'Life event',evn:'All events are simulations, not predictions.',evq:'How will you respond?',
+ ev:[['An unplanned medical bill',30000,'🏥'],['Income pauses temporarily',40000,'💼'],['Caring for a family member',20000,'👨‍👩‍👧']],
+ o:['Use the emergency fund','Adjust plan, use savings','Consider protection'],
+ r1:'Money set aside for this choice',r2:'Simulated cost',okm:'You have funds to handle this simulated event',lack:'There is still a gap. You can plan for it further, and plans can always be adjusted.',
+ pr:'If you choose protection, benefits depend on policy terms. No figures are given here.',plan:'See my life plan',
+ dash:'Your Life Plan',init:'Starting money',alloc:'Allocated',un:'Unallocated',str:'Plan strengths',con:'Still worth considering',sug:'Suggestions',
+ sg:['Funds ready for','Nothing allocated to'],sugt:'Review your plan anytime. Try moving money between goals and see what feels right.',nostr:'Try allocating more to what matters most to you.',nocon:'You allocated to every goal.',
+ score:'Plan completeness (game score)',crit:'Criteria: each goal with money >0 earns 1/6. This is not an insurance suitability or approval score.',
+ plan0:'Plan focused on',
+ ins:'Protection & life planning',ins0:'Savings help you build your future. Protection can help reduce the financial impact of unexpected events.',
+ il:['Health insurance: helps manage medical cost risk, per policy terms','Life insurance: may help with family financial obligations, per coverage','Income / disability protection: depends on available products and terms','Retirement planning: consider the balance of savings, investments and related insurance products'],
+ learn:'Learn more about protection',nourl:'No URL has been set for this button yet',
+ disc:'Game money is simulated for learning, not real money, and not a recommendation to allocate in any proportion. Coverage depends on policy terms.',
+ save:'Save image to phone',share:'Share result',saved:'Great! Your result is ready',svimg:'Save image',close:'Close',err:'Could not create the image. Please try again.',copied:'Result text copied',
+ cs:'I consent to saving my play result (simulated amounts per goal; no name or contact details) to Google Sheets for activity summary',sv2:'Save result',svg:'Saving...',svo:'Saved. Thank you for joining!',svf:'Could not save. Please try again.',svn:'Save link is not set up yet',svd:'Saved',pngsum:'Plan strengths',pngp:'Consider planning protection that fits your life.',date:'Played on'}};
+var S={lang:'th',scr:0,al:{f:0,h:0,e:0,d:0,s:0,p:0},sel:5000,evi:0,pick:-1,fx:true,msg:'m0',mood:'smile',sid:newSid(),saved:false,saving:false,stat:'',scls:'',cs:false};
+function newSid(){return (window.crypto&&crypto.randomUUID)?crypto.randomUUID():'s'+Date.now().toString(36)+Math.random().toString(36).slice(2,10)}
+function t(k){return T[S.lang][k]}
+var fmt=function(n){return Math.round(n).toLocaleString('en-US')};
+function sum(){return CATS.reduce(function(a,c){return a+S.al[c[0]]},0)}
+function left(){return START-sum()}
+function toast(m){var e=$('toast');e.textContent=m;e.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(function(){e.style.display='none'},2200)}
+
+function mascot(m){var N='#14264A',L='#C8E01E',S2='#FFD9B8';
+ var eye=m==='cheer'?'<path d="M72 90q8-10 16 0M112 90q8-10 16 0" stroke="'+N+'" stroke-width="3" fill="none" stroke-linecap="round"/>':'<circle cx="80" cy="88" r="4" fill="'+N+'"/><circle cx="120" cy="88" r="4" fill="'+N+'"/>';
+ var mo={smile:'<path d="M85 110q15 14 30 0" stroke="'+N+'" stroke-width="3" fill="none" stroke-linecap="round"/>',point:'<path d="M85 110q15 14 30 0" stroke="'+N+'" stroke-width="3" fill="none" stroke-linecap="round"/>',think:'<path d="M90 118h18" stroke="'+N+'" stroke-width="3" stroke-linecap="round"/>',cheer:'<path d="M82 106q18 32 36 0z" fill="#fff" stroke="'+N+'" stroke-width="3" stroke-linejoin="round"/>'}[m];
+ var arm={point:'<path d="M155 180L190 150" stroke="'+N+'" stroke-width="16" stroke-linecap="round"/><circle cx="194" cy="147" r="10" fill="'+S2+'"/><path d="M45 185v25" stroke="'+N+'" stroke-width="16" stroke-linecap="round"/>',cheer:'<path d="M45 175L22 128M155 175l23-47" stroke="'+N+'" stroke-width="16" stroke-linecap="round"/><circle cx="20" cy="122" r="10" fill="'+S2+'"/><circle cx="180" cy="122" r="10" fill="'+S2+'"/>',think:'<path d="M45 185v25" stroke="'+N+'" stroke-width="16" stroke-linecap="round"/><path d="M155 180L118 140" stroke="'+N+'" stroke-width="16" stroke-linecap="round"/><circle cx="114" cy="134" r="10" fill="'+S2+'"/>'}[m]||'<path d="M45 175v35M155 175v35" stroke="'+N+'" stroke-width="16" stroke-linecap="round"/>';
+ var br=m==='think'?'M68 72q12-2 24-8M108 64q12-2 24 4':'M68 70q12-6 24 0M108 70q12-6 24 0';
+ return '<svg viewBox="0 0 200 220" role="img" aria-label="น้องวัยเก๋า">'+arm+'<path d="M40 220q0-62 60-62t60 62z" fill="'+N+'"/><path d="M80 160q20 22 40 0" fill="'+L+'"/><ellipse cx="52" cy="92" rx="12" ry="22" fill="#fff" stroke="#dfe3e8"/><ellipse cx="148" cy="92" rx="12" ry="22" fill="#fff" stroke="#dfe3e8"/><circle cx="100" cy="92" r="52" fill="'+S2+'"/><path d="M70 48q30-22 60 0q-30-10-60 0" fill="#fff" stroke="#dfe3e8"/><circle cx="68" cy="104" r="8" fill="#ffb3a7" opacity=".6"/><circle cx="132" cy="104" r="8" fill="#ffb3a7" opacity=".6"/><path d="'+br+'" stroke="#9aa0a6" stroke-width="3" fill="none" stroke-linecap="round"/>'+eye+'<g fill="rgba(255,255,255,.35)" stroke="'+N+'" stroke-width="3.5"><circle cx="80" cy="88" r="17"/><circle cx="120" cy="88" r="17"/></g><path d="M97 88h6" stroke="'+N+'" stroke-width="3.5"/>'+mo+'</svg>'}
+function mas(txt,mood){return '<div class="mas">'+mascot(mood)+'<div class="bub">'+txt+'</div></div>'}
+
+function render(){
+  document.documentElement.lang=S.lang;document.body.className=S.fx?'fx':'nofx';
+  $('bl').textContent=S.lang==='th'?'EN':'TH';$('bf').textContent=S.fx?t('noanim'):t('anim');
+  document.title='LIFE WALLET — '+t('title');
+  var h='';
+  if(S.scr===0)h='<h1>'+t('title')+'</h1><div class="tag">'+t('tag')+'</div>'+mas(t('sub'),'point')+'<p class="note">'+t('time')+'</p><button class="btn" id="go">'+t('start')+'</button>';
+  else if(S.scr===1)h=sAlloc();
+  else if(S.scr===2)h=sEvent();
+  else h=sDash();
+  $('app').innerHTML=h;bind();
+}
+function sAlloc(){
+  var l=left(),p=Math.round(sum()/START*100);
+  var coins=[1000,5000,10000].map(function(a){return '<div class="coin'+(S.sel===a?' on':'')+'" data-a="'+a+'" role="button" aria-label="'+fmt(a)+'">'+fmt(a)+'</div>'}).join('');
+  var cards=CATS.map(function(c){var k=c[0],a=S.al[k];return '<div class="cat" data-k="'+k+'" id="c_'+k+'"><div class="ic">'+c[1]+'</div><div class="nm">'+t(k)+'</div><div class="am">฿'+fmt(a)+'</div><div class="mini"><i style="width:'+Math.round(a/START*100)+'%"></i></div><div class="ctl"><button data-m="'+k+'" aria-label="−">−</button><button data-g="'+k+'" aria-label="drag" style="width:56px">⇄</button></div></div>'}).join('');
+  return mas(t(S.msg),S.mood)+'<div class="wal"><small>'+t('left')+'</small><div class="big">฿'+fmt(l)+'</div><div class="pb"><i style="width:'+(100-p)+'%"></i></div><div class="coins">'+coins+'</div></div><p class="note" style="margin:8px 2px 0">'+t('hint')+'</p><div class="grid">'+cards+'</div><button class="btn" id="nx">'+t('next')+'</button><button class="btn s" id="rs">'+t('reset')+'</button>';
+}
+function sEvent(){
+  var e=t('ev')[S.evi],o=t('o').map(function(x,i){return '<button class="opt" data-o="'+i+'">'+x+'</button>'}).join('');
+  var r='';
+  if(S.pick>=0){var pool=[S.al.e,S.al.s,S.al.p+S.al.h][S.pick],cost=e[1],ok=pool>=cost;
+    r='<div class="card"><div class="row"><span>'+t('r2')+'</span><b>฿'+fmt(cost)+'</b></div><div class="row"><span>'+t('r1')+'</span><b>฿'+fmt(pool)+'</b></div><p><b>'+(ok?t('okm'):t('lack'))+'</b></p>'+(S.pick===2?'<p class="note">'+t('pr')+'</p>':'')+'</div><button class="btn" id="pl">'+t('plan')+'</button>'}
+  return mas(S.pick<0?e[2]+' '+e[0]:t('m3'),S.pick<0?'think':(r&&sum()?'smile':'smile'))+'<h1 style="font-size:24px">'+t('evh')+': '+e[0]+'</h1><p class="note">'+t('evn')+'</p>'+(S.pick<0?'<b>'+t('evq')+'</b>'+o:r);
+}
+function planName(){var b=CATS.slice().sort(function(a,c){return S.al[c[0]]-S.al[a[0]]})[0];return sum()?t('plan0')+' '+t(b[0]):t('plan0')+' —'}
+function strengths(){var a=CATS.filter(function(c){return S.al[c[0]]>=15000}).map(function(c){return t('sg')[0]+t(c[0])+' ฿'+fmt(S.al[c[0]])});return a.length?a:[t('nostr')]}
+function cons(){var a=CATS.filter(function(c){return !S.al[c[0]]}).map(function(c){return t('sg')[1]+t(c[0])});return a.length?a:[t('nocon')]}
+function sDash(){
+  var sc=Math.round(CATS.filter(function(c){return S.al[c[0]]>0}).length/6*100);
+  var bars=CATS.map(function(c){var a=S.al[c[0]];return '<div class="bar"><span>'+c[1]+' '+t(c[0])+'</span><div><i style="width:'+Math.round(a/START*100)+'%"></i></div><b>'+Math.round(a/START*100)+'%</b></div>'}).join('');
+  var li=function(a){return '<ul>'+a.map(function(x){return '<li>'+x+'</li>'}).join('')+'</ul>'};
+  return mas(planName(),'cheer')+'<h1 style="font-size:26px">'+t('dash')+'</h1><div class="card"><div class="row"><span>'+t('init')+'</span><b>฿'+fmt(START)+'</b></div><div class="row"><span>'+t('alloc')+'</span><b>฿'+fmt(sum())+'</b></div><div class="row"><span>'+t('un')+'</span><b>฿'+fmt(left())+'</b></div>'+bars+'</div>'+
+  '<div class="card"><b>'+t('str')+'</b>'+li(strengths())+'<b>'+t('con')+'</b>'+li(cons())+'<b>'+t('sug')+'</b><p>'+t('sugt')+'</p><div class="row"><span>'+t('score')+'</span><b>'+sc+'/100</b></div><p class="note">'+t('crit')+'</p></div>'+
+  '<div class="card"><b>'+t('ins')+'</b><p>'+t('ins0')+'</p>'+li(t('il'))+'<button class="btn s" id="ln">'+t('learn')+'</button></div><p class="note">'+t('disc')+'</p>'+
+  '<div class="card"><label style="display:flex;gap:10px;align-items:flex-start;font-size:14px;line-height:1.5"><input type="checkbox" id="cs" style="width:24px;height:24px;flex:none"'+(S.cs?' checked':'')+'><span>'+t('cs')+'</span></label><button class="btn" id="svr"'+((S.cs&&!S.saved&&!S.saving)?'':' disabled')+'>'+(S.saved?t('svd'):t('sv2'))+'</button><div class="'+S.scls+'" style="font-weight:600;min-height:22px" id="sts" role="status">'+(S.stat?t(S.stat):'')+'</div></div><button class="btn" id="sv">'+t('save')+'</button><button class="btn s" id="sh">'+t('share')+'</button><button class="btn s" id="ag">'+t('again')+'</button>';
+}
+
+function setMsg(m,mood){S.msg=m;S.mood=mood||'smile'}
+function bind(){
+  var g=$('go');if(g)g.onclick=function(){S.scr=1;setMsg('m1','point');render()};
+  var n=$('nx');if(n)n.onclick=function(){if(!sum()){toast(t('min'));return}S.scr=2;S.pick=-1;var q=new URLSearchParams(location.search).get('event');S.evi=(q!==null&&+q>=0&&+q<3)?+q:Math.floor(Math.random()*3);render()};
+  var r=$('rs');if(r)r.onclick=reset;var a=$('ag');if(a)a.onclick=reset;
+  document.querySelectorAll('.coin[data-a]').forEach(function(c){c.onpointerdown=function(e){startDrag(e,+c.dataset.a,null,true)}});
+  document.querySelectorAll('.cat').forEach(function(c){c.onclick=function(){drop(c.dataset.k,S.sel,null)}});
+  document.querySelectorAll('[data-m]').forEach(function(b){b.onclick=function(e){e.stopPropagation();drop(null,S.sel,b.dataset.m)}});
+  document.querySelectorAll('[data-g]').forEach(function(b){b.onclick=function(e){e.stopPropagation()};b.onpointerdown=function(e){e.stopPropagation();if(S.al[b.dataset.g]<=0){toast(t('nomoney'));return}startDrag(e,S.sel,b.dataset.g,false)}});
+  document.querySelectorAll('.opt').forEach(function(b){b.onclick=function(){S.pick=+b.dataset.o;render()}});
+  var p=$('pl');if(p)p.onclick=function(){S.scr=3;render();window.scrollTo(0,0);confetti()};
+  var l=$('ln');if(l)l.onclick=function(){if(LEARN_URL)window.open(LEARN_URL,'_blank','noopener');else toast(t('nourl'))};
+  var cb=$('cs');if(cb)cb.onchange=function(){S.cs=cb.checked;$('svr').disabled=!(S.cs&&!S.saved&&!S.saving)};var sr=$('svr');if(sr)sr.onclick=saveRes;var s=$('sv');if(s)s.onclick=png;var h=$('sh');if(h)h.onclick=share;
+}
+function reset(){S.sid=newSid();S.saved=false;S.saving=false;S.stat='';S.scls='';S.cs=false;S.al={f:0,h:0,e:0,d:0,s:0,p:0};S.scr=0;S.pick=-1;setMsg('m0','smile');render();window.scrollTo(0,0)}
+function catAt(e){var el=document.elementFromPoint(e.clientX,e.clientY);return el&&el.closest?el.closest('.cat'):null}
+function startDrag(e,amt,from,isChip){
+  e.preventDefault();var x0=e.clientX,y0=e.clientY,moved=false,gh=null;
+  function mv(ev){if(!moved&&Math.abs(ev.clientX-x0)+Math.abs(ev.clientY-y0)<8)return;
+    if(!moved){moved=true;gh=document.createElement('div');gh.className='coin ghost';gh.textContent=fmt(amt);document.body.appendChild(gh)}
+    gh.style.left=ev.clientX+'px';gh.style.top=ev.clientY+'px';var c=catAt(ev);document.querySelectorAll('.cat').forEach(function(x){x.classList.toggle('hot',x===c)})}
+  function up(ev){window.removeEventListener('pointermove',mv);window.removeEventListener('pointerup',up);window.removeEventListener('pointercancel',up);
+    if(gh)gh.remove();document.querySelectorAll('.cat').forEach(function(x){x.classList.remove('hot')});
+    if(!moved){if(isChip){S.sel=amt;render()}return}
+    var c=catAt(ev);drop(c?c.dataset.k:null,amt,from)}
+  window.addEventListener('pointermove',mv);window.addEventListener('pointerup',up);window.addEventListener('pointercancel',up);
+}
+function drop(to,amt,from){
+  if(from){amt=Math.min(amt,S.al[from]);if(amt<=0){toast(t('nomoney'));return}
+    if(to===from)return;S.al[from]-=amt;if(to)S.al[to]+=amt}
+  else{if(amt>left()){toast(t('over'));var w=document.querySelector('.wal');if(w){w.classList.remove('shake');void w.offsetWidth;w.classList.add('shake')}return}S.al[to]+=amt}
+  setMsg('m2',left()===0?'cheer':'point');render();
+  if(to){var c=$('c_'+to);if(c)c.classList.add('pop')}
+}
+function confetti(){if(!S.fx)return;for(var i=0;i<14;i++){var s=document.createElement('div');s.className='star';s.textContent='★';s.style.left=Math.random()*95+'vw';s.style.animationDelay=Math.random()*.8+'s';document.body.appendChild(s);setTimeout(function(x){x.remove()},3200,s)}}
+$('bl').onclick=function(){S.lang=S.lang==='th'?'en':'th';render()};
+$('bf').onclick=function(){S.fx=!S.fx;render()};
+$('oc').onclick=function(){$('ov').style.display='none'};
+
+// ลิงก์ Web App (/exec) ของ Apps Script เกม LIFE WALLET – ใช้รับข้อมูลเบื้องหลังเท่านั้น
+var API_URL='PASTE_LIFE_WALLET_EXEC_URL_HERE';
+function saveRes(){
+  if(S.saving||S.saved||!S.cs)return;
+  if(API_URL.indexOf('https://script.google.com/')!==0){S.stat='svn';S.scls='bad';render();return}
+  S.saving=true;S.stat='svg';S.scls='';render();
+  var done=false;function fail(){if(done)return;done=true;S.saving=false;S.stat='svf';S.scls='bad';render()}
+  var tm=setTimeout(fail,25000);
+  var d={sessionId:S.sid,lang:S.lang,al:S.al,evi:S.evi,pick:S.pick,consent:'Agreed'};
+  fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(d),redirect:'follow'})
+    .then(function(r){return r.json()})
+    .then(function(j){clearTimeout(tm);if(done)return;
+      if(j&&j.ok===true){done=true;S.saving=false;S.saved=true;S.stat='svo';S.scls='ok';render()}else fail()})
+    .catch(function(){clearTimeout(tm);fail()});
+}
+function dateStr(){return new Date().toLocaleDateString(S.lang==='th'?'th-TH':'en-GB',{day:'numeric',month:'long',year:'numeric'})}
+function shareText(){return 'LIFE WALLET — '+planName()+'\n'+CATS.map(function(c){return t(c[0])+': ฿'+fmt(S.al[c[0]])}).join('\n')}
+function share(){var tx=shareText();
+  if(navigator.share){navigator.share({title:'LIFE WALLET',text:tx}).catch(function(){})}
+  else if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(tx).then(function(){toast(t('copied'))},function(){toast(tx)})}
+  else toast(tx)}
+function buildCard(){
+  var rows=CATS.map(function(c){var a=S.al[c[0]],p=Math.round(a/START*100);return '<div style="display:flex;align-items:center;gap:16px;margin:15px 0;font-size:34px"><span style="width:470px">'+c[1]+' '+t(c[0])+'</span><div style="flex:1;height:30px;background:#e1e5eb;border-radius:15px;overflow:hidden"><div style="width:'+p+'%;height:100%;background:#2F8FE0"></div></div><b style="width:200px;text-align:right">฿'+fmt(a)+'</b></div>'}).join('');
+  $('card').innerHTML='<div style="width:1080px;height:1350px;background:#fff;color:#14264A;font-family:Sarabun,sans-serif;padding:64px;position:relative;overflow:hidden"><div style="position:absolute;top:0;left:0;right:0;height:26px;background:#C8E01E"></div><div style="font-size:72px;font-weight:800;margin-top:18px">LIFE WALLET</div><div style="font-size:34px;color:#5d6b82">'+t('title')+'</div>'+
+   '<div style="background:#14264A;color:#fff;border-radius:34px;padding:38px;margin:36px 0"><div style="font-size:40px;color:#C8E01E;font-weight:800">'+planName()+'</div><div style="font-size:34px;opacity:.85;margin-top:8px">'+t('alloc')+' ฿'+fmt(sum())+' / ฿'+fmt(START)+'</div></div>'+rows+
+   '<div style="background:#F4F6F9;border-radius:26px;padding:26px;margin-top:26px;font-size:30px;line-height:1.45"><b>'+t('pngsum')+'</b><br>'+strengths().slice(0,2).join('<br>')+'<br><b>'+t('pngp')+'</b></div>'+
+   '<div style="position:absolute;left:64px;right:64px;bottom:44px;font-size:24px;color:#5d6b82;line-height:1.45">'+t('date')+' '+dateStr()+'<br>'+t('disc')+'</div></div>';
+  return $('card').firstChild}
+async function png(){
+  if(typeof html2canvas==='undefined'){toast(t('err'));return}
+  var b=$('sv');b.disabled=true;
+  try{if(document.fonts)await document.fonts.ready;
+    var cv=await html2canvas(buildCard(),{width:1080,height:1350,scale:1,backgroundColor:'#fff'});
+    $('oi').src=cv.toDataURL('image/png');$('oc').textContent=t('close');$('ovt').textContent=t('saved');$('ov').style.display='flex';
+    $('ol').textContent=t('svimg');
+    var blob=await new Promise(function(r){cv.toBlob(r,'image/png')});
+    $('ol').href=URL.createObjectURL(blob);$('ol').setAttribute('download','life-wallet.png');$('ol').style.display='block';
+  }catch(e){toast(t('err'))}
+  b.disabled=false}
+render();
+</script>
+</body>
+</html>
