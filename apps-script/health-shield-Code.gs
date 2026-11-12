@@ -1,4 +1,4 @@
-// HEALTH SHIELD – เสิร์ฟเกม บันทึกผลลงชีต "Health_Shield_Responses" และพักภาพ PNG ชั่วคราว
+// HEALTH SHIELD – รับผลจากหน้าเกมบน GitHub แล้วบันทึกลงชีต "Health_Shield_Responses"
 var SHEET_ID = '1wMzebZM4tdOHEtyLWe_TzEZBUuK_P0SQAcmjK9RD5go';
 var SHEET = 'Health_Shield_Responses';
 var HEADERS = ['Timestamp','Session ID','Language','Emergency Fund','Living Expenses','Health Reserve','Protection Learning','Total Allocated','Remaining','Event','Chosen Approach','Read Health Insurance','Read Critical Illness','Activity Score','Level','Consent Status'];
@@ -7,12 +7,21 @@ var APPR = [['Use reserve','Review budget','Learn coverage','Review financial pl
 var LEVELS = ['SHIELD MASTER','SHIELD BUILDER','SHIELD STARTER'];
 var START = 100000;
 
-function doGet(e) {
-  var id = e && e.parameter && e.parameter.img;
-  if (id) return imagePage_(String(id));
-  return HtmlService.createHtmlOutputFromFile('index')
-    .setTitle('HEALTH SHIELD')
-    .addMetaTag('viewport', 'width=device-width, initial-scale=1');
+function out(o){ return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON); }
+
+// หน้าเกมบน GitHub ส่งข้อมูลมาที่นี่ (fetch POST)
+function doPost(e) {
+  try {
+    var d = JSON.parse((e && e.postData && e.postData.contents) || '{}');
+    return out(saveResult(d));
+  } catch (err) {
+    return out({ok:false, error:'bad request'});
+  }
+}
+
+// เปิดลิงก์ Apps Script ตรง ๆ จะเห็นแค่ข้อความสถานะ (ตัวเกมอยู่บน GitHub)
+function doGet() {
+  return out({ok:true, service:'health-shield'});
 }
 
 function saveResult(d) {
@@ -49,28 +58,4 @@ function save_(d) {
   }
   sh.appendRow(row);
   return {ok:true};
-}
-
-// พักภาพชั่วคราว 6 ชั่วโมง (ไม่มีข้อมูลส่วนตัว) ให้เปิดและบันทึกรูปได้ในแท็บปกติ
-function saveImage(dataUrl) {
-  var p = 'data:image/png;base64,';
-  if (typeof dataUrl !== 'string' || dataUrl.indexOf(p) !== 0 || dataUrl.length > 900000) return {ok:false};
-  var id = Utilities.getUuid().replace(/-/g, '');
-  var size = 90000, map = {}, n = Math.ceil(dataUrl.length / size);
-  for (var i = 0; i < n; i++) map['img_' + id + '_' + i] = dataUrl.substr(i * size, size);
-  map['img_' + id + '_n'] = String(n);
-  CacheService.getScriptCache().putAll(map, 21600);
-  return {ok:true, url: ScriptApp.getService().getUrl() + '?openExternalBrowser=1&img=' + id};
-}
-
-function imagePage_(id) {
-  var html;
-  if (!/^[a-f0-9]{32}$/.test(id)) id = '';
-  var cache = CacheService.getScriptCache(), n = Number(cache.get('img_' + id + '_n') || 0), data = '';
-  for (var i = 0; i < n; i++) data += cache.get('img_' + id + '_' + i) || '';
-  if (!n || data.indexOf('data:image/png;base64,') !== 0 || /[^A-Za-z0-9+\/=:;,]/.test(data))
-    html = '<body style="font-family:sans-serif;padding:20px">ลิงก์หมดอายุ กรุณากลับไปกดบันทึกภาพใหม่</body>';
-  else
-    html = '<body style="margin:0;font-family:sans-serif;text-align:center;background:#102A43;color:#fff"><p style="padding:12px">กดค้างที่ภาพ (หรือคลิกขวา) แล้วเลือกบันทึกรูป</p><img src="' + data + '" style="max-width:100%"></body>';
-  return HtmlService.createHtmlOutput(html).setTitle('HEALTH SHIELD').addMetaTag('viewport', 'width=device-width, initial-scale=1');
 }

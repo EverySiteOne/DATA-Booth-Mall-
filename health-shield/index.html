@@ -94,7 +94,7 @@ var T={th:{
  ciL:['รายชื่อและนิยามโรคที่คุ้มครอง','เงื่อนไขการจ่ายผลประโยชน์','ระยะเวลารอคอยและข้อยกเว้น หากมี','จำนวนเงินเอาประกันและรูปแบบผลประโยชน์','เงื่อนไขการรับประกันและต่ออายุ'],
  chkT:'ควรศึกษาก่อนตัดสินใจ',more:'ดูข้อมูลเพิ่มเติม',nourl:'ยังไม่มีลิงก์ข้อมูลที่ได้รับการยืนยัน กรุณาสอบถามผู้แนะนำที่ได้รับอนุญาต',close:'ปิด',
  disc:'เกมนี้จัดทำขึ้นเพื่อส่งเสริมความรู้เกี่ยวกับการเตรียมความพร้อมทางการเงินและการบริหารความเสี่ยงด้านสุขภาพ งบประมาณและผลลัพธ์ในเกมเป็นสถานการณ์จำลอง ไม่ใช่คำแนะนำทางการเงินเฉพาะบุคคล ไม่ใช่การวินิจฉัยโรค และไม่ใช่การยืนยันสิทธิประโยชน์หรือความคุ้มครองจากประกัน ความคุ้มครองเป็นไปตามเงื่อนไขของกรมธรรม์แต่ละฉบับ',
- cons:'ฉันยินยอมให้บันทึกผลการเล่น (จำนวนเงินจำลองในแต่ละหมวดและแนวทางที่เลือก ไม่มีชื่อหรือข้อมูลติดต่อ) ลง Google Sheets เพื่อสรุปภาพรวมกิจกรรม',sv:'บันทึกผลลงระบบ',svg:'กำลังบันทึก...',svo:'บันทึกสำเร็จ ขอบคุณที่ร่วมกิจกรรม',svf:'บันทึกไม่สำเร็จ กรุณาลองอีกครั้ง',svn:'ต้องเปิดเกมจากลิงก์ Apps Script จึงจะบันทึกได้',svd:'บันทึกแล้ว',
+ cons:'ฉันยินยอมให้บันทึกผลการเล่น (จำนวนเงินจำลองในแต่ละหมวดและแนวทางที่เลือก ไม่มีชื่อหรือข้อมูลติดต่อ) ลง Google Sheets เพื่อสรุปภาพรวมกิจกรรม',sv:'บันทึกผลลงระบบ',svg:'กำลังบันทึก...',svo:'บันทึกสำเร็จ ขอบคุณที่ร่วมกิจกรรม',svf:'บันทึกไม่สำเร็จ กรุณาลองอีกครั้ง',svn:'ยังไม่ได้ตั้งค่าลิงก์บันทึกผล',svd:'บันทึกแล้ว',
  svimg:'บันทึกรูป',saved:'เยี่ยมเลย! เก็บผลลัพธ์ไว้ดูได้เลยนะ',err:'สร้างภาพไม่สำเร็จ ลองใหม่อีกครั้ง',noanim:'ปิดแอนิเมชัน',anim:'เปิดแอนิเมชัน',date:'วันที่เล่น',baht:'บาท'},
 en:{
  sub:'Health Shield Mission',tag:'Protect Your Health. Prepare for Life.',time:'Finish in 2 minutes',start:'Start mission',m0:'Ready to build a shield around your financial plan?',
@@ -119,7 +119,7 @@ en:{
  ciL:['Covered illnesses and definitions','Conditions for benefit payment','Waiting period and exclusions, if any','Sum insured and benefit form','Underwriting and renewal conditions'],
  chkT:'Worth studying before deciding',more:'More information',nourl:'No verified information link yet. Please ask a licensed advisor.',close:'Close',
  disc:"This game promotes knowledge about financial readiness and health risk management. Budgets and results are simulated, not personalized financial advice, not a diagnosis, and not a confirmation of insurance benefits or coverage. Coverage depends on each policy's terms.",
- cons:'I consent to saving my play result (play-money amounts per category and chosen approach; no name or contact details) to Google Sheets for activity summary.',sv:'Save result',svg:'Saving...',svo:'Saved. Thank you for joining!',svf:'Could not save. Please try again.',svn:'Open the game from the Apps Script link to save',svd:'Saved',
+ cons:'I consent to saving my play result (play-money amounts per category and chosen approach; no name or contact details) to Google Sheets for activity summary.',sv:'Save result',svg:'Saving...',svo:'Saved. Thank you for joining!',svf:'Could not save. Please try again.',svn:'Save link is not set up yet',svd:'Saved',
  svimg:'Save image',saved:'Great! Your result is ready',err:'Could not create the image. Please try again.',noanim:'Animations off',anim:'Animations on',date:'Played on',baht:'THB'}};
 var S;
 function newSid(){return (window.crypto&&crypto.randomUUID)?crypto.randomUUID():'s'+Date.now().toString(36)+Math.random().toString(36).slice(2,10)}
@@ -200,14 +200,19 @@ function openM(w){var h=w==='h',L=h?t('hiL'):t('ciL');
  $('mx').onclick=function(){$('md').style.display='none';render()};$('mx').focus()}
 function confetti(){if(!S.fx)return;for(var i=0;i<14;i++){var s=document.createElement('div');s.className='star';s.textContent='★';s.style.left=Math.random()*95+'vw';s.style.animationDelay=Math.random()*.8+'s';document.body.appendChild(s);setTimeout(function(x){x.remove()},3200,s)}}
 $('bl').onclick=function(){S.lang=S.lang==='th'?'en':'th';render()};$('bf').onclick=function(){S.fx=!S.fx;render()};$('oc').onclick=function(){$('ov').style.display='none'};
+// ลิงก์ Web App (/exec) ของ Apps Script เกม HEALTH SHIELD – ใช้รับข้อมูลเบื้องหลังเท่านั้น
+var API_URL='PASTE_HEALTH_SHIELD_EXEC_URL_HERE';
 function saveRes(){
  if(S.saving||S.saved||!S.cs)return;
- if(!(window.google&&google.script&&google.script.run)){S.stat='svn';S.scls='bad';render();return}
+ if(API_URL.indexOf('https://script.google.com/')!==0){S.stat='svn';S.scls='bad';render();return}
  S.saving=true;S.stat='svg';S.scls='';render();var done=false;
  function fail(){if(done)return;done=true;S.saving=false;S.stat='svf';S.scls='bad';render()}
  var tm=setTimeout(fail,25000);
- google.script.run.withSuccessHandler(function(j){clearTimeout(tm);if(done)return;if(j&&j.ok===true){done=true;S.saving=false;S.saved=true;S.stat='svo';S.scls='ok';render()}else fail()}).withFailureHandler(function(){clearTimeout(tm);fail()})
- .saveResult({sessionId:S.sid,lang:S.lang,al:S.al,ev:S.ev,pick:S.pick,rh:S.rh,rc:S.rc,consent:'Agreed'});
+ fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},redirect:'follow',
+  body:JSON.stringify({sessionId:S.sid,lang:S.lang,al:S.al,ev:S.ev,pick:S.pick,rh:S.rh,rc:S.rc,consent:'Agreed'})})
+ .then(function(r){return r.json()})
+ .then(function(j){clearTimeout(tm);if(done)return;if(j&&j.ok===true){done=true;S.saving=false;S.saved=true;S.stat='svo';S.scls='ok';render()}else fail()})
+ .catch(function(){clearTimeout(tm);fail()});
 }
 function dateStr(){return new Date().toLocaleDateString(S.lang==='th'?'th-TH':'en-GB',{day:'numeric',month:'long',year:'numeric'})}
 function buildCard(){
@@ -223,7 +228,7 @@ async function png(){
  try{if(document.fonts)await document.fonts.ready;
   var cv=await html2canvas(buildCard(),{width:1080,height:1350,scale:1,backgroundColor:'#fff'});var du=cv.toDataURL('image/png');
   $('oi').src=du;$('oc').textContent=t('close');$('ovt').textContent=t('saved');$('ol').style.display='none';$('ol').textContent=t('svimg');$('ov').style.display='block';
-  if(window.google&&google.script&&google.script.run)google.script.run.withSuccessHandler(function(r){if(r&&r.ok){$('ol').href=r.url;$('ol').style.display='block'}}).saveImage(du);
+  var blob=await new Promise(function(r){cv.toBlob(r,'image/png')});$('ol').href=URL.createObjectURL(blob);$('ol').setAttribute('download','health-shield.png');$('ol').style.display='block';
  }catch(e){toast(t('err'))}
  b.disabled=false}
 fresh();render();
