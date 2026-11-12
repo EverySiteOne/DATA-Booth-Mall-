@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light only">
+<title>วางแผนเกษียณอายุ</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:only light;--lime:#C8E01E;--navy:#14264A;--blue:#0087C8;--cyan:#45C0C8;--bg:#fff;--g:#F6F7F8;--mut:#6b7280}
+*{box-sizing:border-box}
+html,body{background:#fff!important;color-scheme:only light}body{margin:0;font-family:Sarabun,"Noto Sans Thai",sans-serif;color:var(--navy);background:var(--bg)}
+.wrap{max-width:560px;margin:0 auto;padding:16px 18px 40px}
+header{display:flex;align-items:center;gap:10px;padding-bottom:10px}
+.logo{width:40px;height:40px;border-radius:12px;background:var(--lime);display:grid;place-items:center;font-weight:800}
+header b{font-size:20px}
+.bar{height:10px;background:#e8eaed;border-radius:9px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--lime),#8fd400);transition:width .4s}
+.pct{font-size:13px;color:var(--mut);text-align:right;margin:4px 0 6px}
+.scr{display:none}.scr.on{display:block}
+.mascot{display:flex;gap:10px;align-items:center;margin:8px 0 14px}
+.mascot svg{width:110px;flex:none;animation:bob 2.4s ease-in-out infinite}
+.bub{background:var(--g);border-radius:16px;padding:12px 14px;font-size:16px;line-height:1.5;position:relative}
+.bub:before{content:"";position:absolute;left:-8px;top:22px;border:8px solid transparent;border-right-color:var(--g);border-left:0}
+@keyframes bob{50%{transform:translateY(-5px)}}
+@keyframes think{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
+.thinking svg{animation:think .7s infinite}
+h1{font-size:30px;margin:6px 0}
+label{display:block;font-weight:600;font-size:18px;margin:8px 0}
+.field{position:relative}
+.field input{width:100%;height:64px;font:600 24px Sarabun,sans-serif;padding:0 70px 0 16px;border:2px solid #d9dde2;border-radius:14px;color:var(--navy)}
+.field input:focus{outline:none;border-color:var(--blue)}
+.field span{position:absolute;right:16px;top:19px;font-weight:600;color:var(--mut)}
+.err{color:#c0392b;min-height:22px;margin:6px 0;font-size:15px}
+.btn{width:100%;height:58px;border:0;border-radius:14px;color:#fff;font:800 20px Sarabun,sans-serif;background:linear-gradient(90deg,var(--blue),var(--cyan));cursor:pointer;margin-top:8px}
+.btn.sec{background:var(--g);color:var(--navy)}
+.btn:disabled{opacity:.5}
+.row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #eceef1;font-size:16px}
+.card{background:var(--g);border-radius:18px;padding:14px 16px;margin:12px 0}
+.big{font-size:34px;font-weight:800;color:var(--navy)}
+.risk{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #e3e6ea}
+.risk:last-child{border:0}
+.rate{background:var(--lime);border-radius:10px;padding:2px 10px;font-weight:800;margin-right:8px}
+.amt{font-size:24px;font-weight:800;text-align:right}.amt small{display:block;font-size:12px;color:var(--mut);font-weight:400}
+.note{font-size:13px;color:var(--mut);line-height:1.5}
+.consent{display:flex;gap:10px;align-items:flex-start;font-size:14px;line-height:1.5}
+.consent input{width:24px;height:24px;flex:none}
+#status{min-height:24px;font-weight:600;margin:6px 0}
+.ok{color:#1a8a3a}.bad{color:#c0392b}
+.star{position:fixed;top:-20px;font-size:22px;color:var(--lime);animation:fall 2.2s linear forwards;pointer-events:none;text-shadow:0 0 2px var(--navy)}
+@keyframes fall{to{transform:translateY(105vh) rotate(360deg)}}
+#ov{position:fixed;inset:0;background:rgba(20,38,74,.85);display:none;flex-direction:column;align-items:center;justify-content:center;padding:16px;z-index:9;color:#fff;text-align:center}
+#ov{overflow:auto}#ov img{max-width:100%;max-height:60vh;border-radius:10px;-webkit-touch-callout:default;-webkit-user-select:auto;user-select:auto;pointer-events:auto}#ov a.btn{display:block;max-width:300px;text-decoration:none;line-height:58px;margin:8px 0}
+@media(prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><div class="logo">ก</div><b>วางแผนเกษียณอายุ</b></header>
+<div class="bar"><i id="pb"></i></div><div class="pct" id="pt">0%</div>
+
+<section class="scr on" id="s0">
+  <div class="mascot"><div id="m0"></div><div class="bub">มาเช็กกันหน่อย อีกกี่ปีก็เกษียณแล้ว!</div></div>
+  <h1>ยิ่งเริ่มวางแผนเร็ว ยิ่งเกษียณได้ง่ายขึ้น</h1>
+  <p class="note">ตอบ 5 ข้อสั้น ๆ ใช้เวลาไม่เกิน 2 นาที ไม่ต้องใส่ชื่อหรือเบอร์โทร</p>
+  <button class="btn" onclick="startGame()">เริ่มเกม</button>
+</section>
+
+<section class="scr" id="s1">
+  <div class="mascot"><div id="m1"></div><div class="bub" id="q1b">กรอกอีกนิดเดียว เราจะได้รู้ว่าต้องเตรียมเงินเท่าไหร่</div></div>
+  <label id="ql" for="qi"></label>
+  <div class="field"><input id="qi" type="number" inputmode="decimal" min="0" autocomplete="off"><span id="qu"></span></div>
+  <div class="err" id="qe"></div>
+  <button class="btn" id="qn" onclick="next()">ต่อไป</button>
+  <button class="btn sec" id="qb" onclick="back()">ย้อนกลับ</button>
+</section>
+
+<section class="scr" id="s2">
+  <div class="mascot thinking"><div id="m2"></div><div class="bub">รอแป๊บนะ กำลังคิดเลขให้...</div></div>
+</section>
+
+<section class="scr" id="s3">
+  <div class="mascot"><div id="m3"></div><div class="bub" id="rmsg"></div></div>
+  <div class="card"><div class="note">เงินเกษียณที่ต้องเตรียม (ราคาปัจจุบัน)</div><div class="big" id="rt"></div>
+    <div class="row"><span>อีกกี่ปีเกษียณ</span><b id="ry"></b></div>
+    <div class="row"><span>ต้องใช้เงินหลังเกษียณ</span><b id="rm"></b></div>
+    <div class="row"><span>ขาดจากเป้าหมาย (ยังไม่นับผลตอบแทน)</span><b id="rg"></b></div></div>
+  <b>ต้องออมเพิ่มต่อเดือน</b>
+  <div class="card" id="rr"></div>
+  <div class="card"><div class="row"><span>อายุ / เกษียณ / อายุขัย</span><b id="s_a"></b></div>
+    <div class="row"><span>ใช้ต่อเดือนหลังเกษียณ</span><b id="s_u"></b></div>
+    <div class="row"><span>เงินออมปัจจุบัน</span><b id="s_s"></b></div></div>
+  <p class="note">สมมติฐาน: เป้าหมายคิดเป็นมูลค่าเงินวันนี้ (ไม่รวมเงินเฟ้อ และไม่นับผลตอบแทนหลังเกษียณ) ผลตอบแทน 3.5% / 5.5% / 8% ต่อปีเป็นผลตอบแทนจริงหลังหักเงินเฟ้อ (สมมติ ไม่รับประกัน) ออมสิ้นเดือนทุกเดือน ผลตอบแทนทบต้นรายเดือน เป็นเพียงประมาณการ ไม่ใช่คำแนะนำการลงทุน</p>
+  <div class="card">
+    <label class="consent"><input type="checkbox" id="cs"><span>ฉันยินยอมให้บันทึกผลนี้ (ตัวเลขที่กรอกและผลคำนวณ ไม่มีชื่อหรือข้อมูลติดต่อ) ลง Google Sheets เพื่อใช้สรุปภาพรวมกิจกรรม ไม่ใช้เพื่อการตลาด</span></label>
+    <button class="btn" id="sv" onclick="save()" disabled>บันทึกผลลงระบบ</button>
+    <div id="status" role="status"></div>
+  </div>
+  <button class="btn" onclick="png()" id="pg">บันทึกภาพลงมือถือ</button>
+  <button class="btn sec" onclick="restart()">เริ่มใหม่</button>
+</section>
+</div>
+
+<div id="ov"><p id="ovt"></p><img id="oi" alt="สรุปผล"><a id="ol" class="btn" target="_blank" rel="noopener" style="display:none">บันทึกรูป</a><button class="btn sec" style="max-width:300px" onclick="ov.style.display='none'">ปิด</button></div>
+<div id="card" style="position:fixed;left:-99999px;top:0"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script>
+// ---------- มาสคอต "น้องวัยเก๋า" (SVG) ----------
+function mascot(m){
+  var N='#14264A',L='#C8E01E',S='#FFD9B8';
+  var brow={smile:'M68 70q12-6 24 0M108 70q12-6 24 0',think:'M68 72q12-2 24-8M108 64q12-2 24 4',shock:'M68 62q12-6 24 0M108 62q12-6 24 0'}[m]||'M68 70q12-6 24 0M108 70q12-6 24 0';
+  var mouth={smile:'<path d="M85 110q15 14 30 0" stroke="'+N+'" stroke-width="3" fill="none" stroke-linecap="round"/>',
+   think:'<path d="M90 118h18" stroke="'+N+'" stroke-width="3" stroke-linecap="round"/>',
+   shock:'<ellipse cx="100" cy="116" rx="8" ry="10" fill="'+N+'"/>',
+   cheer:'<path d="M82 106q18 32 36 0z" fill="#fff" stroke="'+N+'" stroke-width="3" stroke-linejoin="round"/>'}[m==='wave'?'smile':m]||'';
+  var eye=m==='cheer'?'<path d="M72 90q8-10 16 0M112 90q8-10 16 0" stroke="'+N+'" stroke-width="3" fill="none" stroke-linecap="round"/>'
+    :'<circle cx="80" cy="88" r="'+(m==='shock'?6:4)+'" fill="'+N+'"/><circle cx="120" cy="88" r="'+(m==='shock'?6:4)+'" fill="'+N+'"/>';
+  var arms={
+   wave:'<path d="M45 175L18 130" stroke="'+N+'" stroke-width="16" stroke-linecap="round"/><circle cx="16" cy="124" r="10" fill="'+S+'"/><path d="M155 185v25" stroke="'+N+'" stroke-width="16" stroke-linecap="round"/>',
+   cheer:'<path d="M45 175L22 128M155 175l23-47" stroke="'+N+'" stroke-width="16" stroke-linecap="round"/><circle cx="20" cy="122" r="10" fill="'+S+'"/><circle cx="180" cy="122" r="10" fill="'+S+'"/>',
+   think:'<path d="M45 185v25" stroke="'+N+'" stroke-width="16" stroke-linecap="round"/><path d="M155 180L118 140" stroke="'+N+'" stroke-width="16" stroke-linecap="round"/><circle cx="114" cy="134" r="10" fill="'+S+'"/>'
+  }[m]||'<path d="M45 175v35M155 175v35" stroke="'+N+'" stroke-width="16" stroke-linecap="round"/>';
+  return '<svg viewBox="0 0 200 220" role="img" aria-label="น้องวัยเก๋า">'+arms+
+   '<path d="M40 220q0-62 60-62t60 62z" fill="'+N+'"/><path d="M80 160q20 22 40 0" fill="'+L+'"/>'+
+   '<ellipse cx="52" cy="92" rx="12" ry="22" fill="#fff" stroke="#dfe3e8"/><ellipse cx="148" cy="92" rx="12" ry="22" fill="#fff" stroke="#dfe3e8"/>'+
+   '<circle cx="100" cy="92" r="52" fill="'+S+'"/><path d="M70 48q30-22 60 0q-30-10-60 0" fill="#fff" stroke="#dfe3e8"/>'+
+   '<circle cx="68" cy="104" r="8" fill="#ffb3a7" opacity=".6"/><circle cx="132" cy="104" r="8" fill="#ffb3a7" opacity=".6"/>'+
+   '<path d="'+brow+'" stroke="#9aa0a6" stroke-width="3" fill="none" stroke-linecap="round"/>'+eye+
+   '<g fill="rgba(255,255,255,.35)" stroke="'+N+'" stroke-width="3.5"><circle cx="80" cy="88" r="17"/><circle cx="120" cy="88" r="17"/></g><path d="M97 88h6" stroke="'+N+'" stroke-width="3.5"/>'+mouth+'</svg>';
+}
+function setM(id,m){document.getElementById(id).innerHTML=mascot(m)}
+
+// ---------- ข้อมูลและขั้นตอน ----------
+var $=function(i){return document.getElementById(i)},ov=$('ov');
+var Q=[
+ {k:'age',l:'อายุปัจจุบัน',u:'ปี',b:'เริ่มจากอายุปัจจุบันก่อนเลย'},
+ {k:'ret',l:'อายุที่ต้องการเกษียณ',u:'ปี',b:'อยากพักผ่อนตอนอายุเท่าไหร่ดีนะ'},
+ {k:'life',l:'อายุขัยที่คาดการณ์',u:'ปี',b:'เผื่อไว้นาน ๆ ก็ดีนะ จะได้สบายใจ'},
+ {k:'inc',l:'เงินที่ต้องการใช้ต่อเดือน (หลังเกษียณ)',u:'บาท',b:'ใช้เป็นเงินมูลค่าวันนี้ได้เลย'},
+ {k:'sav',l:'เงินออมเพื่อเกษียณที่มีตอนนี้',u:'บาท',b:'ข้อสุดท้ายแล้ว! ถ้ายังไม่มีใส่ 0'}
+];
+var step=0,D={},R=null,sid=null,saving=false,saved=false;
+var fmt=function(n){return Math.round(n).toLocaleString('th-TH')};
+function show(id){document.querySelectorAll('.scr').forEach(function(e){e.classList.remove('on')});$(id).classList.add('on');window.scrollTo(0,0)}
+function prog(p){$('pb').style.width=p+'%';$('pt').textContent=p+'%'}
+function newSid(){return (window.crypto&&crypto.randomUUID)?crypto.randomUUID():'s'+Date.now().toString(36)+Math.random().toString(36).slice(2,10)}
+
+function startGame(){D={};step=0;R=null;saved=false;saving=false;sid=newSid();show('s1');render()}
+function render(){
+  var q=Q[step];setM('m1',step===0?'wave':'smile');
+  $('q1b').textContent=step===0?'กรอกอีกนิดเดียว เราจะได้รู้ว่าต้องเตรียมเงินเท่าไหร่':q.b;
+  $('ql').textContent=q.l;$('qu').textContent=q.u;$('qi').value=D[q.k]!==undefined?D[q.k]:'';
+  $('qe').textContent='';$('qb').style.display=step?'block':'none';
+  $('qn').textContent=step===4?'คำนวณ':'ต่อไป';prog(Math.round(step/5*100));
+  setTimeout(function(){$('qi').focus()},50);
+}
+function validate(k,v){
+  if(v===''||isNaN(v))return'กรุณากรอกตัวเลข';
+  if(k==='age'&&(v<1||v>100||v%1))return'อายุต้องเป็นจำนวนเต็ม 1–100 ปี';
+  if(k==='ret'){if(v%1||v>100)return'อายุเกษียณต้องเป็นจำนวนเต็มไม่เกิน 100 ปี';if(v<=D.age)return'อายุเกษียณต้องมากกว่าอายุปัจจุบัน ('+D.age+' ปี)'}
+  if(k==='life'){if(v%1||v>120)return'อายุขัยต้องเป็นจำนวนเต็มไม่เกิน 120 ปี';if(v<=D.ret)return'อายุขัยต้องมากกว่าอายุเกษียณ ('+D.ret+' ปี)'}
+  if(k==='inc'&&(v<=0||v>10000000))return'กรุณากรอกจำนวนเงินมากกว่า 0 บาท';
+  if(k==='sav'&&(v<0||v>1e10))return'เงินออมต้องไม่ติดลบ';
+  return'';
+}
+function next(){
+  var q=Q[step],raw=$('qi').value.trim(),v=raw===''?'':Number(raw),e=validate(q.k,v);
+  if(e){$('qe').textContent=e;return}
+  D[q.k]=v;
+  if(step<4){step++;render();return}
+  prog(100);calcFlow();
+}
+function back(){if(step>0){step--;render()}}
+$('qi').addEventListener('keydown',function(e){if(e.key==='Enter')next()});
+
+// ---------- สูตรคำนวณ ----------
+function calc(d){
+  var n=d.ret-d.age,m=d.life-d.ret,target=d.inc*12*m,N=n*12;
+  var out={n:n,m:m,target:target,gap0:Math.max(0,target-d.sav),sc:[]};
+  [['ความเสี่ยงต่ำ',.035],['ความเสี่ยงปานกลาง',.055],['ความเสี่ยงสูง',.08]].forEach(function(s){
+    var r=s[1],fv=d.sav*Math.pow(1+r,n),gap=Math.max(0,target-fv);
+    var i=Math.pow(1+r,1/12)-1,pmt=gap>0?gap*i/(Math.pow(1+i,N)-1):0;
+    out.sc.push({name:s[0],rate:r,fv:fv,gap:gap,pmt:pmt});
+  });
+  return out;
+}
+function calcFlow(){
+  show('s2');setM('m2','think');
+  setTimeout(function(){
+    try{R=calc(D);if(!R.sc.every(function(s){return isFinite(s.pmt)&&s.pmt>=0}))throw 0}
+    catch(e){show('s1');$('qe').textContent='คำนวณไม่สำเร็จ กรุณาตรวจสอบตัวเลขอีกครั้ง';return}
+    showResult();
+  },1300);
+}
+function showResult(){
+  var ok=R.sc[0].pmt===0,hard=R.sc[1].pmt>20000,mood=ok?'cheer':hard?'think':'smile';
+  setM('m3',mood);
+  $('rmsg').textContent=ok?'ยอดเยี่ยม! คุณมีเงินออมเพียงพอตามสมมติฐานนี้':hard?'ยังมีเวลาปรับแผนได้ ลองขยับอายุเกษียณหรือเริ่มออมทีละน้อยดูนะ':'เกือบถึงแล้ว! ออมเพิ่มอีกนิดก็ถึงเป้าหมาย';
+  $('rt').textContent=fmt(R.target)+' บาท';$('ry').textContent=R.n+' ปี';$('rm').textContent=R.m+' ปี';
+  $('rg').textContent=R.gap0>0?fmt(R.gap0)+' บาท':'ไม่ขาด';
+  $('rr').innerHTML=R.sc.map(function(s){return '<div class="risk"><div><span class="rate">'+(s.rate*100).toFixed(1)+'%</span>'+s.name+'</div><div class="amt">'+(s.pmt>0?fmt(s.pmt):'ไม่ต้องออมเพิ่ม')+'<small>'+(s.pmt>0?'บาทต่อเดือน':'คุณมีเงินออมเพียงพอตามสมมติฐานนี้')+'</small></div></div>'}).join('');
+  $('s_a').textContent=D.age+' / '+D.ret+' / '+D.life+' ปี';$('s_u').textContent=fmt(D.inc)+' บาท';$('s_s').textContent=fmt(D.sav)+' บาท';
+  $('cs').checked=false;$('sv').disabled=true;$('sv').textContent='บันทึกผลลงระบบ';setStatus('','');
+  show('s3');prog(100);confetti();
+}
+function confetti(){if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;
+  for(var i=0;i<14;i++){var s=document.createElement('div');s.className='star';s.textContent='★';s.style.left=Math.random()*95+'vw';s.style.animationDelay=Math.random()*.8+'s';document.body.appendChild(s);setTimeout(function(x){x.remove()},3200,s)}}
+function restart(){show('s0');prog(0);setM('m0','wave');D={};R=null}
+function setStatus(t,c){var s=$('status');s.textContent=t;s.className=c}
+$('cs').addEventListener('change',function(){$('sv').disabled=!this.checked||saving||saved});
+
+// ---------- บันทึกลง Google Sheets ----------
+// ลิงก์ Web App ของ Apps Script (ใช้รับข้อมูลเบื้องหลังเท่านั้น ผู้เล่นจะไม่เห็นหน้า Apps Script)
+var API_URL='https://script.google.com/macros/s/AKfycbzcoUwn9Ro5hf6T6e92g6ROUyx6P8l9eqTN3_P-P0zgDMsoFyhSBPeTf2ovO0yQGIPzvA/exec';
+function save(){
+  if(saving||saved||!R||!$('cs').checked)return;
+  saving=true;$('sv').disabled=true;setStatus('กำลังบันทึก...','');
+  var done=false;
+  function fail(){if(done)return;done=true;saving=false;$('sv').disabled=false;setStatus('บันทึกไม่สำเร็จ กรุณาตรวจสอบอินเทอร์เน็ตแล้วลองอีกครั้ง','bad')}
+  var tm=setTimeout(fail,25000);
+  var payload={sessionId:sid,age:D.age,retAge:D.ret,life:D.life,income:D.inc,savings:D.sav,years:R.n,target:Math.round(R.target),
+    low:Math.round(R.sc[0].pmt),mid:Math.round(R.sc[1].pmt),high:Math.round(R.sc[2].pmt),consent:'Agreed'};
+  // ส่งเป็น text/plain เพื่อไม่ให้เบราว์เซอร์ติด CORS preflight
+  fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload),redirect:'follow'})
+    .then(function(r){return r.json()})
+    .then(function(j){
+      if(done)return;clearTimeout(tm);
+      if(j&&j.ok===true){done=true;saving=false;saved=true;setStatus('บันทึกสำเร็จ ขอบคุณที่ร่วมกิจกรรม','ok');$('sv').textContent='บันทึกแล้ว'}
+      else fail();
+    })
+    .catch(function(){clearTimeout(tm);fail()});
+}
+
+// ---------- ภาพ PNG 1080x1350 ----------
+function buildCard(){
+  var d=new Date().toLocaleDateString('th-TH',{day:'numeric',month:'long',year:'numeric'});
+  var rows=R.sc.map(function(s){return '<div style="display:flex;justify-content:space-between;align-items:center;padding:26px 0;border-bottom:2px solid #e3e6ea"><div style="font-size:40px"><span style="background:#C8E01E;border-radius:16px;padding:4px 18px;font-weight:800;margin-right:16px">'+(s.rate*100).toFixed(1)+'%</span>'+s.name+'</div><div style="font-size:50px;font-weight:800;text-align:right">'+(s.pmt>0?fmt(s.pmt):'เพียงพอแล้ว')+'<div style="font-size:26px;font-weight:400;color:#6b7280">'+(s.pmt>0?'บาทต่อเดือน':'ตามสมมติฐาน')+'</div></div></div>'}).join('');
+  $('card').innerHTML='<div style="width:1080px;height:1350px;background:#fff;font-family:Sarabun,sans-serif;color:#14264A;padding:70px;position:relative;overflow:hidden"><div style="position:absolute;top:0;left:0;right:0;height:26px;background:#C8E01E"></div>'+
+   '<div style="font-size:64px;font-weight:800;letter-spacing:2px;margin-top:20px">RETIREMENT PLANNER</div><div style="font-size:32px;color:#6b7280">วางแผนเกษียณอายุ</div>'+
+   '<div style="background:#14264A;color:#fff;border-radius:36px;padding:48px;margin:48px 0 20px"><div style="font-size:34px;opacity:.8">เงินเกษียณที่ต้องเตรียม (มูลค่าเงินวันนี้)</div><div style="font-size:96px;font-weight:800;color:#C8E01E">'+fmt(R.target)+' บาท</div><div style="font-size:30px;opacity:.8">อีก '+R.n+' ปีเกษียณ • ใช้เงินหลังเกษียณ '+R.m+' ปี</div></div>'+
+   '<div style="font-size:40px;font-weight:800;margin-top:30px">เงินที่ควรออมเพิ่มต่อเดือน</div>'+rows+
+   '<div style="position:absolute;left:70px;right:70px;bottom:60px;font-size:25px;color:#6b7280;line-height:1.5">คำนวณเมื่อ '+d+'<br>เป็นการประมาณการตามสมมติฐาน (ผลตอบแทนจริงหลังเงินเฟ้อ ไม่รับประกัน) ไม่ใช่คำแนะนำการลงทุน</div></div>';
+  return $('card').firstChild;
+}
+async function png(){
+  if(!R||typeof html2canvas==='undefined'){alert('ไม่สามารถสร้างภาพได้ กรุณาตรวจสอบอินเทอร์เน็ต');return}
+  var b=$('pg');b.disabled=true;b.textContent='กำลังสร้างภาพ...';
+  try{
+    if(document.fonts)await document.fonts.ready;
+    var cv=await html2canvas(buildCard(),{width:1080,height:1350,scale:1,backgroundColor:'#fff'});
+    var blob=await new Promise(function(r){cv.toBlob(r,'image/png')});
+    var file=new File([blob],'retirement-planner.png',{type:'image/png'});
+    var url=URL.createObjectURL(blob);
+    $('oi').src=cv.toDataURL('image/png');
+    $('ol').href=url;$('ol').setAttribute('download','retirement-planner.png');$('ol').style.display='block';
+    var m=/iPhone|iPad|iPod/.test(navigator.userAgent);
+    $('ovt').textContent='เยี่ยมเลย! เก็บผลลัพธ์ไว้ดูได้เลยนะ'+(m?' (กดค้างที่ภาพแล้วเลือก "เพิ่มไปยังรูปภาพ")':'');
+    ov.style.display='flex';
+    if(m&&navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file]})}catch(e){}}
+  }catch(e){alert('สร้างภาพไม่สำเร็จ ลองใหม่อีกครั้ง')}
+  b.disabled=false;b.textContent='บันทึกภาพลงมือถือ';
+}
+setM('m0','wave');
+</script>
+</body>
+</html>
